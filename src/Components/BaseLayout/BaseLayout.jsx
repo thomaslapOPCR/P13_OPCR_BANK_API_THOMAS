@@ -1,18 +1,25 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import Navigation from "../Navigation/Navigation.jsx";
+import Footer from "../Footer/Footer.jsx";
+import styles from "../../style/main.module.css"
 
-export const BaseLayout = () => {
+const BaseLayout = () => {
+  return (
+    <>
+      <header>
+        <Navigation/>
+      </header>
 
+      <main className={styles.main}>
+        <Outlet />
+      </main>
 
-    return (
-        <div >
-            <header>
-
-            </header>
-
-            <main >
-                <Outlet />
-            </main>
-        </div>
-    )
+      <footer>
+        <Footer/>
+      </footer>
+    </>
+  )
 }
+
+export default BaseLayout
