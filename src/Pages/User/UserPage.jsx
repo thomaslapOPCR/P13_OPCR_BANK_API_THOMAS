@@ -19,13 +19,13 @@ const UserPage = () => {
     const [firstName, setFirstName] = useState(user.firstName);
 
     const [error, setError] = useState('');
+
     const isAuthenticated = useSelector((state) => state.user.authenticated);
 
     useEffect( () => {
         if (!isAuthenticated) {
             navigate("/Sign-in");
         }
-
     }, [isAuthenticated,navigate]);
 
     const handleEditClick = () => {

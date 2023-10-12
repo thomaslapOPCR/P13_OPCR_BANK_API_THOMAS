@@ -13,12 +13,11 @@ const NavBar = () => {
     const ReduxFirstName = useSelector((state) => state.user.user.firstName);
     const user = useSelector((state) => state.user.user);
     const [ firstName, setFirstName] = useState('');
-    const [ id, setId] = useState('');
+
 
     useEffect(() => {
         if(isAuthenticated) {
           setFirstName(user.firstName)
-            setId(user.id)
         }
     }, [user,isAuthenticated]);
 
@@ -40,13 +39,13 @@ const NavBar = () => {
             <div>
                 {isAuthenticated ? (
                     <>
-                        <Link className={style['main-nav-item']} to={`/user/${id}`}>
+                        <Link className={style['main-nav-item']} to={`/user`}>
                             <i className="fa fa-user-circle"></i>
                             {!ReduxFirstName ? firstName :ReduxFirstName }
                         </Link>
-                        <Link className={style['main-nav-item']} to={`/sign-in`}>
-                            Sign In
-                        </Link>
+                        {/*<Link className={style['main-nav-item']} to={`/sign-in`}>*/}
+                        {/*    Sign In*/}
+                        {/*</Link>*/}
                         <Link className={style['main-nav-item']} onClick={logout}>
                             <i className="fa fa-sign-out"></i>
                             Sign Out

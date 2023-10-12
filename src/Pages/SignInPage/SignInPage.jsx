@@ -1,9 +1,10 @@
-import React, {useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { token, updateProfile } from '../../store/userSlice.js';
+import {token, updateProfile, updaterRememberMe} from '../../store/userSlice.js';
 import styles from "../../style/main.module.css"
-import { useNavigate , Navigate } from 'react-router-dom';
+import { useNavigate  } from 'react-router-dom';
 import {getProfile, login} from '../../services/requestApi.js';
+import {saveToLocalStorage} from "../../services/authContext";
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -13,16 +14,12 @@ const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
   const isAuthenticated = useSelector((state) => state.user.authenticated);
 
-  const user = useSelector((state) => state.user.user);
-  // const token = useSelector((state)=> state.user.token);
-  console.log(isAuthenticated, token)
-  if (isAuthenticated) {
-    navigate(`/user/${user.id}`);
 
-  }
+  useEffect(() => {
+    if (isAuthenticated) navigate(`/user`);
+  });
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -33,7 +30,8 @@ const SignIn = () => {
         const getProfileData = await getProfile(loggedIn.token);
         dispatch(token(loggedIn.token));
         dispatch(updateProfile(getProfileData));
-        navigate(`/user/${getProfileData.id}`);
+        saveToLocalStorage('profile',JSON.stringify(getProfileData),rememberMe);
+        navigate(`/user`);
       } else {
         setError('Login failed - Email or password invalid');
       }
@@ -72,7 +70,10 @@ const SignIn = () => {
                   type="checkbox"
                   id="remember-me"
                   checked={rememberMe}
-                  onChange={() => setRememberMe(!rememberMe)}
+                  onChange={(e) => {
+                    setRememberMe(e.target.checked)
+                    dispatch(updaterRememberMe(e.target.checked))
+                  }}
               />
               <label htmlFor="remember-me">Remember me</label>
             </div>
